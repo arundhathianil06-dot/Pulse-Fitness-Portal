@@ -160,7 +160,7 @@
                                 <br>
                                 <p>
                                     <label><b><font face="Segoe UI, Tahoma, sans-serif">Daily Energy Level:</font></b></label><br><br>
-                                    <select id="energy" name="energy" required>>
+                                    <select id="energy" name="energy" required>
                                         <option value="">-- Select Energy Level --</option>
                                         <option value="high">🔋 High - Ready to smash PRs</option>
                                         <option value="moderate">⚡ Moderate - Feeling good</option>
@@ -179,6 +179,13 @@
                                 </p>
                                 <br>
                                 <input type="submit" value="LOG DAILY STATS">
+                                <br><br>
+
+<a href="logs.html">
+    <button type="button">
+        VIEW DAILY STATS
+    </button>
+</a>
                             </form>
                         </td>
                     </tr>
@@ -187,8 +194,9 @@
             </td>
         </tr>
     </table>
+<br><br>
 
-    <br><br>
+<br><br>
 
     <hr>
 
@@ -212,7 +220,7 @@ document.getElementById("fitnessForm")
         sleep: document.getElementById("sleep").value
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbwlU55PmvoQasXrSxpCL4j9W7dlyUDlMZVPDV5AcGSVdpa0RJzCoiSkNlsrCX_8xsVt/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbwne_4cemjEFXDSnjEQ7xfjZJNOT3AWIISvbvyF7Avbc4ralo43Bv0ukzFKBxJh2usA/exec", {
         method: "POST",
         body: JSON.stringify(data)
     })
