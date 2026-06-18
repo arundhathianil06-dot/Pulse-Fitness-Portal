@@ -147,20 +147,20 @@
                             <hr color="#333333" size="2">
                             <br>
                             
-                            <form>
+                            <form id="fitnessForm">
                                 <p>
                                     <label><b><font face="Segoe UI, Tahoma, sans-serif">Full Name:</font></b></label><br><br>
-                                    <input type="text" id="name" required placeholder="Enter your name" size="50">
+                                    <input type="text" id="name" name="name" required placeholder="Enter your name" size="50">
                                 </p>
                                 <br>
                                 <p>
                                     <label><b><font face="Segoe UI, Tahoma, sans-serif">Current Weight (kg):</font></b></label><br><br>
-                                    <input type="number" id="weight" step="0.1" required placeholder="e.g., 75.5" size="50">
+                                    <input type="number" id="weight" name="weight" required placeholder="e.g., 75.5" size="50">
                                 </p>
                                 <br>
                                 <p>
                                     <label><b><font face="Segoe UI, Tahoma, sans-serif">Daily Energy Level:</font></b></label><br><br>
-                                    <select id="energy" required>
+                                    <select id="energy" name="energy" required>>
                                         <option value="">-- Select Energy Level --</option>
                                         <option value="high">🔋 High - Ready to smash PRs</option>
                                         <option value="moderate">⚡ Moderate - Feeling good</option>
@@ -170,7 +170,7 @@
                                 <br>
                                 <p>
                                     <label><b><font face="Segoe UI, Tahoma, sans-serif">Sleep Quality Last Night:</font></b></label><br><br>
-                                    <select id="sleep" required>
+                                    <select id="sleep" name="sleep" required>
                                         <option value="">-- Select Sleep Quality --</option>
                                         <option value="excellent">Excellent (7-9 hours, uninterrupted)</option>
                                         <option value="good">Good (Restful sleep)</option>
@@ -198,5 +198,36 @@
         </font>
     </center>
 
+<script>
+
+document.getElementById("fitnessForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const data = {
+        name: document.getElementById("name").value,
+        weight: document.getElementById("weight").value,
+        energy: document.getElementById("energy").value,
+        sleep: document.getElementById("sleep").value
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbwlU55PmvoQasXrSxpCL4j9W7dlyUDlMZVPDV5AcGSVdpa0RJzCoiSkNlsrCX_8xsVt/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(result => {
+        alert("Data saved successfully!");
+        document.getElementById("fitnessForm").reset();
+    })
+    .catch(error => {
+        alert("Error saving data");
+        console.error(error);
+    });
+
+});
+
+</script>
 </body>
 </html>
