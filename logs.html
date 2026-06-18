@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Daily Stats Logs</title>
+</head>
+
+<body bgcolor="#121212" text="#ffffff" link="#00ff88" vlink="#00ff88">
+
+<table width="100%" cellpadding="40" cellspacing="0" border="0" bgcolor="#237349">
+    <tr>
+        <td align="center">
+            <h1>
+                <font color="white">PULSE FITNESS PORTAL</font>
+            </h1>
+
+            <p>
+                <b>
+                    <font color="#00ff88">
+                        DAILY FITNESS LOGS
+                    </font>
+                </b>
+            </p>
+        </td>
+    </tr>
+</table>
+
+
+<h1>Daily Stats Logs</h1>
+
+<div id="editSection" style="display:none;">
+
+<h2>Edit Record</h2>
+
+<input type="hidden" id="editRow">
+
+<p>
+Name:<br>
+<input type="text" id="editName">
+</p>
+
+<p>
+Weight:<br>
+<input type="number" id="editWeight">
+</p>
+
+<p>
+Energy:<br>
+
+<select id="editEnergy">
+    <option value="high">🔋 High - Ready to smash PRs</option>
+    <option value="moderate">⚡ Moderate - Feeling good</option>
+    <option value="low">🪫 Low - Needs extra motivation</option>
+</select>
+
+</p>
+
+<p>
+Sleep:<br>
+<select id="sleep" name="sleep" >
+                                        <option value="">-- Select Sleep Quality --</option>
+                                        <option value="excellent">Excellent (7-9 hours, uninterrupted)</option>
+                                        <option value="good">Good (Restful sleep)</option>
+                                        <option value="poor">Poor (Tossing and turning / less than 6 hours)</option>
+                                    </select>
+</p>
+
+<button onclick="saveEdit()">
+Save Changes
+</button>
+
+<button onclick="cancelEdit()">
+Cancel
+</button>
+
+<hr>
+
+</div>
+
+<table border="1" id="statsTable">
+
+    <thead>
+        <tr>
+            <th><font color="#00ff88">Name</font></th>
+<th><font color="#00ff88">Weight</font></th>
+<th><font color="#00ff88">Energy</font></th>
+<th><font color="#00ff88">Sleep</font></th>
+<th><font color="#00ff88">Date</font></th>
+<th><font color="#00ff88">Actions</font></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+
+<br><br>
+
+<a href="index.html">
+    <button>
+        ← BACK TO HOME
+    </button>
+</a>
+
+</center>
+
+<br><br>
+
+<hr>
+
+<center>
+    <font color="#a0a0a0">
+        &copy; 2026 Pulse Fitness Portal. Built for the dedicated.
+    </font>
+</center>
+<script>
+
+const scriptURL =
+"https://script.google.com/macros/s/AKfycbwne_4cemjEFXDSnjEQ7xfjZJNOT3AWIISvbvyF7Avbc4ralo43Bv0ukzFKBxJh2usA/exec";
+
+function loadData(){
+
+    fetch(scriptURL)
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let tbody =
+        document.querySelector("#statsTable tbody");
+
+        tbody.innerHTML = "";
+
+        for(let i = 1; i < data.length; i++){
+
+            let row = `
+            <tr>
+                <td>${data[i][0]}</td>
+               <td>${data[i][1]}</td>
+               <td>${data[i][2]}</td>
+               <td>${data[i][3]}</td>
+               <td>${data[i][4]}</td>
+
+              <td>
+    <button onclick="editRow(
+${i+1},
+'${data[i][0]}',
+'${data[i][1]}',
+'${data[i][2]}',
+'${data[i][3]}'
+)">
+Edit
+</button>
+
+    <button onclick="deleteRow(${i+1})">
+        Delete
+    </button>
+</td>
+            </tr>
+            `;
+
+            tbody.innerHTML += row;
+        }
+
+    });
+
+}
+
+function editRow(row,name,weight,energy,sleep){
+
+    document.getElementById("editSection").style.display="block";
+
+    document.getElementById("editRow").value=row;
+    document.getElementById("editName").value=name;
+    document.getElementById("editWeight").value=weight;
+    document.getElementById("editEnergy").value=energy;
+    document.getElementById("editSleep").value=sleep;
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+function saveEdit(){
+
+    const row=
+    document.getElementById("editRow").value;
+
+    fetch(scriptURL,{
+        method:"POST",
+        body:JSON.stringify({
+            action:"edit",
+            row:row,
+            name:document.getElementById("editName").value,
+            weight:document.getElementById("editWeight").value,
+            energy:document.getElementById("editEnergy").value,
+            sleep:document.getElementById("editSleep").value
+        })
+    })
+    .then(response=>response.text())
+    .then(result=>{
+
+        alert("Record Updated");
+
+        document.getElementById("editSection").style.display="none";
+
+        loadData();
+    });
+}
+
+function cancelEdit(){
+
+    document.getElementById("editSection").style.display="none";
+}
+
+function deleteRow(rowNumber){
+
+    if(!confirm("Delete this record?")){
+        return;
+    }
+
+    fetch(scriptURL,{
+        method:"POST",
+        body:JSON.stringify({
+            action:"delete",
+            row:rowNumber
+        })
+    })
+
+    .then(response => response.text())
+
+    .then(result => {
+
+        alert("Record Deleted");
+
+        loadData();
+
+    });
+
+}
+
+loadData();
+
+</script>
+
+</body>
+
+</html>
