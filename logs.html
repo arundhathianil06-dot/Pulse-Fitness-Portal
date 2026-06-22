@@ -1,251 +1,418 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Stats Logs</title>
-</head>
-
-<body bgcolor="#121212" text="#ffffff" link="#00ff88" vlink="#00ff88">
-
-<table width="100%" cellpadding="40" cellspacing="0" border="0" bgcolor="#237349">
-    <tr>
-        <td align="center">
-            <h1>
-                <font color="white">PULSE FITNESS PORTAL</font>
-            </h1>
-
-            <p>
-                <b>
-                    <font color="#00ff88">
-                        DAILY FITNESS LOGS
-                    </font>
-                </b>
-            </p>
-        </td>
-    </tr>
-</table>
-
-
-<h1>Daily Stats Logs</h1>
-
-<div id="editSection" style="display:none;">
-
-<h2>Edit Record</h2>
-
-<input type="hidden" id="editRow">
-
-<p>
-Name:<br>
-<input type="text" id="editName">
-</p>
-
-<p>
-Weight:<br>
-<input type="number" id="editWeight">
-</p>
-
-<p>
-Energy:<br>
-
-<select id="editEnergy">
-    <option value="high">🔋 High - Ready to smash PRs</option>
-    <option value="moderate">⚡ Moderate - Feeling good</option>
-    <option value="low">🪫 Low - Needs extra motivation</option>
-</select>
-
-</p>
-
-<p>
-Sleep:<br>
-<select id="sleep" name="sleep" >
-                                        <option value="">-- Select Sleep Quality --</option>
-                                        <option value="excellent">Excellent (7-9 hours, uninterrupted)</option>
-                                        <option value="good">Good (Restful sleep)</option>
-                                        <option value="poor">Poor (Tossing and turning / less than 6 hours)</option>
-                                    </select>
-</p>
-
-<button onclick="saveEdit()">
-Save Changes
-</button>
-
-<button onclick="cancelEdit()">
-Cancel
-</button>
-
-<hr>
-
-</div>
-
-<table border="1" id="statsTable">
-
-    <thead>
-        <tr>
-            <th><font color="#00ff88">Name</font></th>
-<th><font color="#00ff88">Weight</font></th>
-<th><font color="#00ff88">Energy</font></th>
-<th><font color="#00ff88">Sleep</font></th>
-<th><font color="#00ff88">Date</font></th>
-<th><font color="#00ff88">Actions</font></th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-    </tbody>
-
-</table>
-
-<br><br>
-
-<a href="index.html">
-    <button>
-        ← BACK TO HOME
-    </button>
-</a>
-
-</center>
-
-<br><br>
-
-<hr>
-
-<center>
-    <font color="#a0a0a0">
-        &copy; 2026 Pulse Fitness Portal. Built for the dedicated.
-    </font>
-</center>
-<script>
-
-const scriptURL =
-"https://script.google.com/macros/s/AKfycbwne_4cemjEFXDSnjEQ7xfjZJNOT3AWIISvbvyF7Avbc4ralo43Bv0ukzFKBxJh2usA/exec";
-
-function loadData(){
-
-    fetch(scriptURL)
-
-    .then(response => response.json())
-
-    .then(data => {
-
-        let tbody =
-        document.querySelector("#statsTable tbody");
-
-        tbody.innerHTML = "";
-
-        for(let i = 1; i < data.length; i++){
-
-            let row = `
-            <tr>
-                <td>${data[i][0]}</td>
-               <td>${data[i][1]}</td>
-               <td>${data[i][2]}</td>
-               <td>${data[i][3]}</td>
-               <td>${data[i][4]}</td>
-
-              <td>
-    <button onclick="editRow(
-${i+1},
-'${data[i][0]}',
-'${data[i][1]}',
-'${data[i][2]}',
-'${data[i][3]}'
-)">
-Edit
-</button>
-
-    <button onclick="deleteRow(${i+1})">
-        Delete
-    </button>
-</td>
-            </tr>
-            `;
-
-            tbody.innerHTML += row;
+    <style>
+        /* Base Theme Colors & Reset */
+        :root {
+            --bg-black: #090a0f;
+            --bg-dark-blue: #0f172a;
+            --bg-card: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --alert-red: #ef4444;
+            --alert-red-hover: #dc2626;
         }
 
-    });
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
 
-}
+        /* Header Setup */
+        .header-banner {
+            background: linear-gradient(135deg, #1e3a8a, var(--bg-dark-blue));
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-blue);
+        }
 
-function editRow(row,name,weight,energy,sleep){
+        .header-banner h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
 
-    document.getElementById("editSection").style.display="block";
+        .header-banner p {
+            color: var(--accent-blue);
+            font-weight: bold;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
 
-    document.getElementById("editRow").value=row;
-    document.getElementById("editName").value=name;
-    document.getElementById("editWeight").value=weight;
-    document.getElementById("editEnergy").value=energy;
-    document.getElementById("editSleep").value=sleep;
+        /* Layout Container */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-}
+        h1.page-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-blue);
+            padding-left: 15px;
+        }
 
-function saveEdit(){
+        /* Cards/Sections */
+        .card-section {
+            background-color: var(--bg-dark-blue);
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
 
-    const row=
-    document.getElementById("editRow").value;
+        .card-section h2 {
+            color: var(--accent-blue);
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
 
-    fetch(scriptURL,{
-        method:"POST",
-        body:JSON.stringify({
-            action:"edit",
-            row:row,
-            name:document.getElementById("editName").value,
-            weight:document.getElementById("editWeight").value,
-            energy:document.getElementById("editEnergy").value,
-            sleep:document.getElementById("editSleep").value
-        })
-    })
-    .then(response=>response.text())
-    .then(result=>{
+        .card-section hr {
+            border: 0;
+            border-top: 2px solid #1e293b;
+            margin: 20px 0;
+        }
 
-        alert("Record Updated");
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-        document.getElementById("editSection").style.display="none";
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
 
-        loadData();
-    });
-}
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            background-color: #0b0f19;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: var(--text-light);
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
 
-function cancelEdit(){
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
 
-    document.getElementById("editSection").style.display="none";
-}
+        /* Table Design */
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border: 1px solid #1e293b;
+        }
 
-function deleteRow(rowNumber){
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #0b0f19;
+            text-align: left;
+        }
 
-    if(!confirm("Delete this record?")){
-        return;
+        .stats-table th, .stats-table td {
+            padding: 15px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .stats-table th {
+            background-color: #1e293b;
+            color: var(--accent-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-table tbody tr:hover {
+            background-color: rgba(30, 41, 59, 0.4);
+        }
+
+        /* Action Buttons Inside Table */
+        .btn-action-edit {
+            background-color: var(--accent-blue);
+            color: var(--bg-black);
+            border: none;
+            padding: 6px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-action-edit:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-action-delete {
+            background-color: transparent;
+            color: var(--alert-red);
+            border: 1px solid var(--alert-red);
+            padding: 5px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-action-delete:hover {
+            background-color: var(--alert-red);
+            color: var(--text-light);
+        }
+
+        /* Core Execution Buttons */
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: var(--bg-black);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-right: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 10px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+        }
+
+        .btn-cancel {
+            background-color: transparent;
+            border: 1px solid #475569;
+            color: var(--text-muted);
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #334155;
+            color: var(--text-light);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid #1e293b;
+            font-size: 0.9rem;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-banner">
+        <h1>PULSE FITNESS PORTAL</h1>
+        <p>DAILY FITNESS LOGS</p>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Daily Stats Logs</h1>
+
+        <div id="editSection" class="card-section" style="display:none;">
+            <h2>Edit Record</h2>
+            <hr>
+            <input type="hidden" id="editRow">
+
+            <div class="form-group">
+                <label for="editName">Name:</label>
+                <input type="text" id="editName">
+            </div>
+
+            <div class="form-group">
+                <label for="editWeight">Weight (kg):</label>
+                <input type="number" id="editWeight" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label for="editEnergy">Energy Level:</label>
+                <select id="editEnergy">
+                    <option value="high">🔋 High - Ready to smash PRs</option>
+                    <option value="moderate">⚡ Moderate - Feeling good</option>
+                    <option value="low">🪫 Low - Needs extra motivation</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="editSleep">Sleep Quality:</label>
+                <select id="editSleep" name="sleep">
+                    <option value="">-- Select Sleep Quality --</option>
+                    <option value="excellent">Excellent (7-9 hours, uninterrupted)</option>
+                    <option value="good">Good (Restful sleep)</option>
+                    <option value="poor">Poor (Tossing and turning / less than 6 hours)</option>
+                </select>
+            </div>
+
+            <div style="margin-top: 25px;">
+                <button class="btn-primary" onclick="saveEdit()">Save Changes</button>
+                <button class="btn-cancel" onclick="cancelEdit()">Cancel</button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="statsTable" class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Weight</th>
+                        <th>Energy</th>
+                        <th>Sleep</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="index.html" class="btn-secondary">← BACK TO HOME</a>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Pulse Fitness Portal. Built for the dedicated.
+    </footer>
+
+    <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwne_4cemjEFXDSnjEQ7xfjZJNOT3AWIISvbvyF7Avbc4ralo43Bv0ukzFKBxJh2usA/exec";
+
+    function loadData(){
+        fetch(scriptURL)
+        .then(response => response.json())
+        .then(data => {
+            let tbody = document.querySelector("#statsTable tbody");
+            tbody.innerHTML = "";
+
+            for(let i = 1; i < data.length; i++){
+                let row = `
+                <tr>
+                    <td><strong>${data[i][0]}</strong></td>
+                    <td>${data[i][1]} kg</td>
+                    <td>${data[i][2]}</td>
+                    <td>${data[i][3]}</td>
+                    <td style="color: var(--text-muted); font-size: 0.9rem;">${data[i][4]}</td>
+                    <td>
+                        <button class="btn-action-edit" onclick="editRow(${i+1}, '${data[i][0]}', '${data[i][1]}', '${data[i][2]}', '${data[i][3]}')">Edit</button>
+                        <button class="btn-action-delete" onclick="deleteRow(${i+1})">Delete</button>
+                    </td>
+                </tr>
+                `;
+                tbody.innerHTML += row;
+            }
+        });
     }
 
-    fetch(scriptURL,{
-        method:"POST",
-        body:JSON.stringify({
-            action:"delete",
-            row:rowNumber
+    function editRow(row, name, weight, energy, sleep){
+        document.getElementById("editSection").style.display = "block";
+
+        document.getElementById("editRow").value = row;
+        document.getElementById("editName").value = name;
+        document.getElementById("editWeight").value = weight;
+        document.getElementById("editEnergy").value = energy;
+        document.getElementById("editSleep").value = sleep;
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+    function saveEdit(){
+        const row = document.getElementById("editRow").value;
+
+        fetch(scriptURL, {
+            method: "POST",
+            body: JSON.stringify({
+                action: "edit",
+                row: row,
+                name: document.getElementById("editName").value,
+                weight: document.getElementById("editWeight").value,
+                energy: document.getElementById("editEnergy").value,
+                sleep: document.getElementById("editSleep").value
+            })
         })
-    })
+        .then(response => response.text())
+        .then(result => {
+            alert("Record Updated");
+            document.getElementById("editSection").style.display = "none";
+            loadData();
+        });
+    }
 
-    .then(response => response.text())
+    function cancelEdit(){
+        document.getElementById("editSection").style.display = "none";
+    }
 
-    .then(result => {
+    function deleteRow(rowNumber){
+        if(!confirm("Delete this record?")){
+            return;
+        }
 
-        alert("Record Deleted");
+        fetch(scriptURL, {
+            method: "POST",
+            body: JSON.stringify({
+                action: "delete",
+                row: rowNumber
+            })
+        })
+        .then(response => response.text())
+        .then(result => {
+            alert("Record Deleted");
+            loadData();
+        });
+    }
 
-        loadData();
-
-    });
-
-}
-
-loadData();
-
-</script>
-
+    // Run execution on mount
+    loadData();
+    </script>
 </body>
-
 </html>
