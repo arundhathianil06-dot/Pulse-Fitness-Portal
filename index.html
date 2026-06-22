@@ -2,240 +2,409 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PULSE | Personal Fitness Portal</title>
+    <style>
+        /* Base Theme Colors & Reset */
+        :root {
+            --bg-black: #090a0f;
+            --bg-dark-blue: #0f172a;
+            --bg-card: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --alert-red: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Header Setup */
+        .header-banner {
+            background: linear-gradient(135deg, #1e3a8a, var(--bg-dark-blue));
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        .header-banner h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+
+        .header-banner p {
+            color: var(--accent-blue);
+            font-weight: bold;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* Marquee */
+        marquee {
+            background-color: #020617;
+            color: var(--accent-blue);
+            padding: 10px 0;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .center-media {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .center-media img {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 2px solid var(--bg-card);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Links & Buttons */
+        a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+
+        /* Cards/Sections */
+        .card-section {
+            background-color: var(--bg-dark-blue);
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-section h2 {
+            color: var(--accent-blue);
+            margin-top: 0;
+            font-size: 1.75rem;
+        }
+
+        .card-section hr {
+            border: 0;
+            border-top: 2px solid #1e293b;
+            margin: 15px 0;
+        }
+
+        /* Workout Table Styles */
+        .workout-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #0b0f19;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .workout-table th, .workout-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .workout-table th {
+            background-color: #1e293b;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .workout-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* High Intensity Highlight rules */
+        .high-intensity {
+            color: var(--alert-red) !important;
+            font-weight: bold;
+        }
+
+        /* Eating Habits List */
+        .habits-list {
+            padding-left: 20px;
+        }
+
+        .habits-list li {
+            margin-bottom: 20px;
+        }
+
+        .habits-list li strong {
+            color: var(--accent-blue);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            background-color: #0b0f19;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: var(--text-light);
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        /* Buttons */
+        input[type="submit"], 
+        .btn-secondary {
+            background-color: var(--accent-blue);
+            color: var(--bg-black);
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            display: inline-block;
+        }
+
+        input[type="submit"]:hover,
+        .btn-secondary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        input[type="submit"]:active,
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid #1e293b;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
+<body>
 
-<body bgcolor="#121212" text="#ffffff" link="#00ff88" vlink="#00ff88">
+    <header class="header-banner">
+        <h1>PULSE FITNESS PORTAL</h1>
+        <p>TRACK YOUR PROGRESS. CRUSH YOUR GOALS.</p>
+    </header>
 
-    <table width="100%" cellpadding="40" cellspacing="0" border="0" bgcolor="#237349">
-        <tr>
-            <td align="center">
-                <h1>
-                    <font color="white">PULSE FITNESS PORTAL</font>
-                </h1>
-                <p>
-                    <b>
-                        <font color="#00ff88">
-                            TRACK YOUR PROGRESS. CRUSH YOUR GOALS.
-                        </font>
-                    </b>
-                </p>
-            </td>
-        </tr>
-    </table>
-
-    <marquee bgcolor="black" scrollamount="6">
-        <font color="#00ff88">
-            🔥 TODAY IS ANOTHER CHANCE TO GET BETTER. // 💪 NO EXCUSES. NO LIMITS. // 🏃‍♂️ COMFORT IS THE ENEMY OF PROGRESS. // 🥗 YOU CANNOT OUT-TRAIN A BAD DIET! // ⚡ THE ONLY BAD WORKOUT IS THE ONE THAT DIDN'T HAPPEN.
-        </font>
+    <marquee scrollamount="6">
+        🔥 TODAY IS ANOTHER CHANCE TO GET BETTER. // 💪 NO EXCUSES. NO LIMITS. // 🏃‍♂️ COMFORT IS THE ENEMY OF PROGRESS. // 🥗 YOU CANNOT OUT-TRAIN A BAD DIET! // ⚡ THE ONLY BAD WORKOUT IS THE ONE THAT DIDN'T HAPPEN.
     </marquee>
 
-    <br><br>
+    <main class="container">
+        
+        <section class="center-media">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700" alt="Fitness Workout" width="500">
+            <a href="https://www.muscleblaze.com/?srsltid=AfmBOoqqX8C2fBQVluMM9_SmEoatFnNLWbntvBea4dw9SMcUChwzhZXC" target="_blank">
+                Visit Muscle Blaze for Fitness Products
+            </a>
+        </section>
 
-    <center>
-        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700"
-             alt="Fitness Workout"
-             width="500">
-    </center>
-
-    <br>
-
-    <center>
-        <a href="https://www.muscleblaze.com/?srsltid=AfmBOoqqX8C2fBQVluMM9_SmEoatFnNLWbntvBea4dw9SMcUChwzhZXC" target="_blank">
-            Visit Muscle Blaze for Fitness Products
-        </a>
-    </center>
-
-    <br><br>
-
-    <table width="90%" max-width="1100" align="center" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-            <td>
-
-                <table width="100%" cellpadding="30" cellspacing="0" border="0" bgcolor="#1e1e1e">
+        <section class="card-section">
+            <h2>Weekly Workout Schedule</h2>
+            <hr>
+            <p style="color: var(--text-muted);">Keep track of your weekly split. Intense sessions are highlighted in bright red.</p>
+            
+            <table class="workout-table">
+                <thead>
                     <tr>
-                        <td>
-                            <h2><font face="Segoe UI, Tahoma, sans-serif" color="#00ff88">Weekly Workout Schedule</font></h2>
-                            <hr color="#333333" size="2">
-                            <p><font face="Segoe UI, Tahoma, sans-serif">Keep track of your weekly split. Intense sessions are highlighted in bright red.</font></p>
-                            
-                            <table width="100%" cellpadding="15" cellspacing="0" border="1" bordercolor="#333333" bgcolor="#181818">
-                                <thead bgcolor="#252525">
-                                    <tr>
-                                        <th><font face="Segoe UI, Tahoma, sans-serif" color="#00ff88">DAY</font></th>
-                                        <th><font face="Segoe UI, Tahoma, sans-serif" color="#00ff88">WORKOUT FOCUS</font></th>
-                                        <th><font face="Segoe UI, Tahoma, sans-serif" color="#00ff88">DURATION</font></th>
-                                        <th><font face="Segoe UI, Tahoma, sans-serif" color="#00ff88">INTENSITY LEVEL</font></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><b><font face="Segoe UI, Tahoma, sans-serif">Monday</font></b></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif" color="#ff0000">Push Day (chest,shoulder,triceps)</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">120 Mins</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif" color="#ff0000">High (Intense)</font></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b><font face="Segoe UI, Tahoma, sans-serif">Tuesday</font></b></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Pull Day (Back, Biceps)</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">90 Mins</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Medium</font></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b><font face="Segoe UI, Tahoma, sans-serif">Wednesday</font></b></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Lower Body (Leg & Cardio Section)</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">90 Mins</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Medium</font></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b><font face="Segoe UI, Tahoma, sans-serif">Thursday</font></b></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif" color="#ff0000">Push Day (chest,shoulder,triceps)</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">120 Mins</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif" color="#ff0000">High (Intense)</font></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b><font face="Segoe UI, Tahoma, sans-serif">Friday</font></b></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Pull Day (Back, Biceps)</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">90 Mins</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Medium</font></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b><font face="Segoe UI, Tahoma, sans-serif">Saturday</font></b></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Lower Body (Leg & Cardio Section)</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">90 Mins</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">Medium</font></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b><font face="Segoe UI, Tahoma, sans-serif">Sunday</font></b></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif" color="#ff0000">Rest Day</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif">24 hr</font></td>
-                                        <td><font face="Segoe UI, Tahoma, sans-serif"></font></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
+                        <th>DAY</th>
+                        <th>WORKOUT FOCUS</th>
+                        <th>DURATION</th>
+                        <th>INTENSITY LEVEL</th>
                     </tr>
-                </table>
-
-                <br><br>
-
-                <table width="100%" cellpadding="30" cellspacing="0" border="0" bgcolor="#1e1e1e">
+                </thead>
+                <tbody>
                     <tr>
-                        <td>
-                            <h2><font face="Segoe UI, Tahoma, sans-serif" color="#00ff88">Fundamental Healthy Eating Habits</font></h2>
-                            <hr color="#333333" size="2">
-                            
-                            <ol>
-                                <li><font face="Segoe UI, Tahoma, sans-serif"><b><font color="#00ff88">Prioritize Whole Foods:</font></b> Base the majority of your meals on single-ingredient foods that are nutrient-dense and free of heavy processing.</font></li>
-                                <br>
-                                <li><font face="Segoe UI, Tahoma, sans-serif"><b><font color="#00ff88">Stay Hydrated Daily:</font></b> Aim to drink at least 3-4 liters of water every day to optimize metabolic function and muscle recovery.</font></li>
-                                <br>
-                                <li><font face="Segoe UI, Tahoma, sans-serif"><b><font color="#00ff88">Hit Your Protein Target:</font></b> Consume adequate protein with every meal to rebuild torn muscle fibers and stay satiated longer.</font></li>
-                                <br>
-                                <li><font face="Segoe UI, Tahoma, sans-serif"><b><font color="#00ff88">Practice Mindful Eating:</font></b> Pay attention to your body's true hunger cues instead of eating out of boredom or emotional stress.</font></li>
-                            </ol>
-                        </td>
+                        <td><strong>Monday</strong></td>
+                        <td class="high-intensity">Push Day (chest, shoulder, triceps)</td>
+                        <td>120 Mins</td>
+                        <td class="high-intensity">High (Intense)</td>
                     </tr>
-                </table>
-
-                <br><br>
-
-                <table width="100%" cellpadding="30" cellspacing="0" border="0" bgcolor="#1e1e1e">
                     <tr>
-                        <td>
-                            <h2><font face="Segoe UI, Tahoma, sans-serif" color="#00ff88">Quick Health Check Form</font></h2>
-                            <hr color="#333333" size="2">
-                            <br>
-                            
-                            <form id="fitnessForm">
-                                <p>
-                                    <label><b><font face="Segoe UI, Tahoma, sans-serif">Full Name:</font></b></label><br><br>
-                                    <input type="text" id="name" name="name" required placeholder="Enter your name" size="50">
-                                </p>
-                                <br>
-                                <p>
-                                    <label><b><font face="Segoe UI, Tahoma, sans-serif">Current Weight (kg):</font></b></label><br><br>
-                                    <input type="number" id="weight" name="weight" required placeholder="e.g., 75.5" size="50">
-                                </p>
-                                <br>
-                                <p>
-                                    <label><b><font face="Segoe UI, Tahoma, sans-serif">Daily Energy Level:</font></b></label><br><br>
-                                    <select id="energy" name="energy" required>
-                                        <option value="">-- Select Energy Level --</option>
-                                        <option value="high">🔋 High - Ready to smash PRs</option>
-                                        <option value="moderate">⚡ Moderate - Feeling good</option>
-                                        <option value="low">🪫 Low - Needs extra motivation</option>
-                                    </select>
-                                </p>
-                                <br>
-                                <p>
-                                    <label><b><font face="Segoe UI, Tahoma, sans-serif">Sleep Quality Last Night:</font></b></label><br><br>
-                                    <select id="sleep" name="sleep" required>
-                                        <option value="">-- Select Sleep Quality --</option>
-                                        <option value="excellent">Excellent (7-9 hours, uninterrupted)</option>
-                                        <option value="good">Good (Restful sleep)</option>
-                                        <option value="poor">Poor (Tossing and turning / less than 6 hours)</option>
-                                    </select>
-                                </p>
-                                <br>
-                                <input type="submit" value="LOG DAILY STATS">
-                                <br><br>
-
-<a href="logs.html">
-    <button type="button">
-        VIEW DAILY STATS
-    </button>
-</a>
-                            </form>
-                        </td>
+                        <td><strong>Tuesday</strong></td>
+                        <td>Pull Day (Back, Biceps)</td>
+                        <td>90 Mins</td>
+                        <td>Medium</td>
                     </tr>
-                </table>
+                    <tr>
+                        <td><strong>Wednesday</strong></td>
+                        <td>Lower Body (Leg & Cardio Section)</td>
+                        <td>90 Mins</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Thursday</strong></td>
+                        <td class="high-intensity">Push Day (chest, shoulder, triceps)</td>
+                        <td>120 Mins</td>
+                        <td class="high-intensity">High (Intense)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Friday</strong></td>
+                        <td>Pull Day (Back, Biceps)</td>
+                        <td>90 Mins</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Saturday</strong></td>
+                        <td>Lower Body (Leg & Cardio Section)</td>
+                        <td>90 Mins</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sunday</strong></td>
+                        <td class="high-intensity">Rest Day</td>
+                        <td>24 hr</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-            </td>
-        </tr>
-    </table>
-<br><br>
+        <section class="card-section">
+            <h2>Fundamental Healthy Eating Habits</h2>
+            <hr>
+            <ol class="habits-list">
+                <li><strong>Prioritize Whole Foods:</strong> Base the majority of your meals on single-ingredient foods that are nutrient-dense and free of heavy processing.</li>
+                <li><strong>Stay Hydrated Daily:</strong> Aim to drink at least 3-4 liters of water every day to optimize metabolic function and muscle recovery.</li>
+                <li><strong>Hit Your Protein Target:</strong> Consume adequate protein with every meal to rebuild torn muscle fibers and stay satiated longer.</li>
+                <li><strong>Practice Mindful Eating:</strong> Pay attention to your body's true hunger cues instead of eating out of boredom or emotional stress.</li>
+            </ol>
+        </section>
 
-<br><br>
+        <section class="card-section">
+            <h2>Quick Health Check Form</h2>
+            <hr>
+            <br>
+            <form id="fitnessForm">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="weight">Current Weight (kg):</label>
+                    <input type="number" id="weight" name="weight" required placeholder="e.g., 75.5" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="energy">Daily Energy Level:</label>
+                    <select id="energy" name="energy" required>
+                        <option value="">-- Select Energy Level --</option>
+                        <option value="high">🔋 High - Ready to smash PRs</option>
+                        <option value="moderate">⚡ Moderate - Feeling good</option>
+                        <option value="low">🪫 Low - Needs extra motivation</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sleep">Sleep Quality Last Night:</label>
+                    <select id="sleep" name="sleep" required>
+                        <option value="">-- Select Sleep Quality --</option>
+                        <option value="excellent">Excellent (7-9 hours, uninterrupted)</option>
+                        <option value="good">Good (Restful sleep)</option>
+                        <option value="poor">Poor (Tossing and turning / less than 6 hours)</option>
+                    </select>
+                </div>
+                
+                <input type="submit" value="LOG DAILY STATS">
+                <br>
+                <a href="logs.html" style="display: inline-block; width: 100%; max-width: 500px;">
+                    <button type="button" class="btn-secondary" style="width:50%;">VIEW DAILY STATS</button>
+                </a>
+            </form>
+        </section>
 
-    <hr>
+    </main>
 
-    <center>
-        <font color="#a0a0a0">
-            &copy; 2026 Pulse Fitness Portal. Built for the dedicated.
-        </font>
-    </center>
+    <footer>
+        &copy; 2026 Pulse Fitness Portal. Built for the dedicated.
+    </footer>
 
-<script>
+    <script>
+    document.getElementById("fitnessForm").addEventListener("submit", function(e){
+        e.preventDefault();
 
-document.getElementById("fitnessForm")
-.addEventListener("submit", function(e){
+        const data = {
+            name: document.getElementById("name").value,
+            weight: document.getElementById("weight").value,
+            energy: document.getElementById("energy").value,
+            sleep: document.getElementById("sleep").value
+        };
 
-    e.preventDefault();
-
-    const data = {
-        name: document.getElementById("name").value,
-        weight: document.getElementById("weight").value,
-        energy: document.getElementById("energy").value,
-        sleep: document.getElementById("sleep").value
-    };
-
-    fetch("https://script.google.com/macros/s/AKfycbwne_4cemjEFXDSnjEQ7xfjZJNOT3AWIISvbvyF7Avbc4ralo43Bv0ukzFKBxJh2usA/exec", {
-        method: "POST",
-        body: JSON.stringify(data)
-    })
-    .then(response => response.text())
-    .then(result => {
-        alert("Data saved successfully!");
-        document.getElementById("fitnessForm").reset();
-    })
-    .catch(error => {
-        alert("Error saving data");
-        console.error(error);
+        fetch("https://script.google.com/macros/s/AKfycbwne_4cemjEFXDSnjEQ7xfjZJNOT3AWIISvbvyF7Avbc4ralo43Bv0ukzFKBxJh2usA/exec", {
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.text())
+        .then(result => {
+            alert("Data saved successfully!");
+            document.getElementById("fitnessForm").reset();
+        })
+        .catch(error => {
+            alert("Error saving data");
+            console.error(error);
+        });
     });
-
-});
-
-</script>
+    </script>
 </body>
 </html>
